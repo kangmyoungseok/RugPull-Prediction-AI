@@ -1,6 +1,4 @@
-# RugPull_Prediction_AI
-러그풀 예측 AI모델 개발
+# 주어진 TimeStamp까지 Feature 구하기
+ - 정상 : 30일 이내
+ - 스캠 : RugPull 발생 지점 직전까지
 
-# 1. 라벨링
-# 2. Feature 도출
-# 3. 학습
