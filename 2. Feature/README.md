@@ -16,3 +16,4 @@ def get_feature1(pairs,Timestamp):
 # Labeling 파일 버전 관리
 - Labeling_v1.0.csv : 이전 Labeling 단계에서 가져온 파일
 - Labeling_v1.1.csv : False_data_timestamp.py , 정상 데이터의 TimeStamp를 구해서 'feature_timestamp' 열 추가
+- Labeling_v1.2.csv : 토큰의 Last Transaction이 30일 이후인 데이터들 정제했음. 이게 최종 Labeling Data
