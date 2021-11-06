@@ -2,7 +2,7 @@ import requests
 
 mint_query_template = '''
 {
-  mints(first: 1000, orderBy: timestamp, orderDirection: asc, where:{ pair: "%s" , timestamp_gt:%s  }) {
+  mints(first: 1000, orderBy: timestamp, orderDirection: asc, where:{ pair: "%s" , timestamp_gt:%s, timestamp_lt:%s  }) {
       amount0
       amount1
       to
@@ -14,7 +14,7 @@ mint_query_template = '''
 
 swap_query_template = '''
 {
-  swaps(first: 1000, orderBy: timestamp, orderDirection: asc, where:{ pair: "%s" , timestamp_gt:%s }) {
+  swaps(first: 1000, orderBy: timestamp, orderDirection: asc, where:{ pair: "%s" , timestamp_gt:%s , timestamp_lt:%s}) {
       amount0In
       amount0Out
       amount1In
@@ -29,7 +29,7 @@ swap_query_template = '''
 
 burn_query_template = '''
 {
-  burns(first: 1000, orderBy: timestamp, orderDirection: asc, where:{ pair: "%s" , timestamp_gt:%s }) {
+  burns(first: 1000, orderBy: timestamp, orderDirection: asc, where:{ pair: "%s" , timestamp_gt:%s, timestamp_lt:%s }) {
       amount0
       amount1
       to
@@ -51,12 +51,12 @@ def run_query(query):
     else:
         raise Exception('Query failed. return code is {}.      {}'.format(request.status_code, query))
 
-def call_theGraph_mint(pair_id):
+def call_theGraph_mint(pair_id,limit_timestamp):
     mint_array = [] 
     timestamp = 0
     try:
       while(True):
-        query = mint_query_template % (pair_id,timestamp)
+        query = mint_query_template % (pair_id,timestamp,limit_timestamp)
         result = run_query(query)
 
         if(len(result['data']['mints']) < 1000): # 1000개 미만이니까 끝낸다.
@@ -71,12 +71,12 @@ def call_theGraph_mint(pair_id):
       
     return mint_array
 
-def call_theGraph_swap(pair_id):
+def call_theGraph_swap(pair_id,limit_timestamp):
     swap_array = [] 
     timestamp = 0
     try:
       while(True):
-        query = swap_query_template % (pair_id,timestamp)
+        query = swap_query_template % (pair_id,timestamp,limit_timestamp)
         result = run_query(query)
 
         if(len(result['data']['swaps']) < 1000): # 1000개 미만이니까 끝낸다.
@@ -91,12 +91,12 @@ def call_theGraph_swap(pair_id):
       
     return swap_array
 
-def call_theGraph_burn(pair_id):
+def call_theGraph_burn(pair_id,limit_timestamp):
     burn_array = [] 
     timestamp = 0
     try:
       while(True):
-        query = burn_query_template % (pair_id,timestamp)
+        query = burn_query_template % (pair_id,timestamp,limit_timestamp)
         result = run_query(query)
 
         if(len(result['data']['burns']) < 1000): # 1000개 미만이니까 끝낸다.

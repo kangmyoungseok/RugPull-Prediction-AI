@@ -42,6 +42,7 @@ query_init = '''
     name
     txCount
     totalLiquidity
+    decimals
   }
    token1{
     id
@@ -49,6 +50,7 @@ query_init = '''
     name
     txCount
     totalLiquidity
+    decimals
   }
    reserve0
    reserve1
@@ -73,6 +75,7 @@ query_iter = '''
     name
     txCount
     totalLiquidity
+    decimals
   }
    token1{
     id
@@ -80,6 +83,7 @@ query_iter = '''
     name
     txCount
     totalLiquidity
+    decimals
   }
    reserve0
    reserve1

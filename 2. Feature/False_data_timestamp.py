@@ -33,5 +33,4 @@ for data in datas:
 df = pd.DataFrame(datas)
 df.to_csv('Labeling_v1.1.csv',encoding='utf-8-sig',index=False)
 
-#테스트 코드 적는 칸
-#pair = '0x374826e3b21b8172b902c358e793be2465e6f727'
+

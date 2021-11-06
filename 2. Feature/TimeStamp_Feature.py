@@ -1,3 +1,5 @@
+#라벨링된 데이터 파일에 대해서 주어진 타임스탬프시점의 Feature를 구한다.
+#TheGraph API에서 얻을 수 있는 정보들에 한해서.
 from pandas.core.frame import DataFrame
 import pandas as pd
 import time
@@ -21,59 +23,43 @@ def get_feature(data):
     swap_data_transaction = call_theGraph_swap(pair_address)
     burn_data_transaction = call_theGraph_burn(pair_address)
 
-    #initial_Liquidity 의 이더와 토큰 구하기
-    initial_Liquidity_Eth , initial_Liquidity_Token = get_initial_Liquidity(data['token0.symbol'],mint_data_transaction)
 
     # 각각의 count 구하기
     mint_count = len(mint_data_transaction)
     swap_count = len(swap_data_transaction)
     burn_count = len(burn_data_transaction)
+    total_count = mint_count + swap_count + burn_count
 
     # Mint/Burn/Swap의 Active Period 상의 분포 
     initial_timestamp = int(mint_data_transaction[0]['timestamp'])
     last_timestamp = get_last_timestamp(mint_data_transaction,swap_data_transaction,burn_data_transaction)
     active_period = last_timestamp - initial_timestamp
-    mint_mean_period = int(get_mint_mean_period(mint_data_transaction,initial_timestamp))
-    swap_mean_period = int(get_swap_mean_period(swap_data_transaction,initial_timestamp))
-    burn_mean_period = int(get_burn_mean_period(burn_data_transaction,initial_timestamp))
-    
+    try:
+        mint_mean_period = int(get_mint_mean_period(mint_data_transaction,initial_timestamp)) / active_period
+        swap_mean_period = int(get_swap_mean_period(swap_data_transaction,initial_timestamp)) / active_period
+        burn_mean_period = int(get_burn_mean_period(burn_data_transaction,initial_timestamp)) / active_period
+    except:
+        print("active Period : 0 , pair_address: %s" %pair_address)
+        mint_mean_period, swap_mean_period, burn_mean_period = 0,0,0
+
     #SwapIn/SwapOut 비율
     swapIn,swapOut = swap_IO_rate(swap_data_transaction,token_index(data))    
 
-    #rugpull timestamp , 러그풀 시점에서 유동성 풀에 있는 이더 변화량(rugpull timestamp / change)
-    rugpull_timestamp, rugpull_change, is_rugpull, before_rugpull_Eth, after_rugpull_Eth,rugpull_method = get_rugpull_timestamp(mint_data_transaction,swap_data_transaction,burn_data_transaction,token_index(data))
-
-    #rugpull 이 시작부터 끝날때까지 경과한 시간
-    rugpull_proceeding_time = int(rugpull_timestamp) - int(initial_timestamp)
-    if(is_rugpull == False):
-        rugpull_proceeding_time = 0
-        rugpull_method = ''
-        rugpull_timestamp = '0'
-        rugpull_change = ''
-
     #데이터 저장
-    data['initial_Liquidity_Eth'] = initial_Liquidity_Eth
-    data['initial_Liquidity_Token'] = initial_Liquidity_Token   
     data['last_transaction_timestamp'] = last_timestamp
     data['last_transaction_date'] = datetime.datetime.fromtimestamp(int(last_timestamp)).strftime('%Y-%m-%d %H:%M:%S')
     data['mint_count'] = mint_count
     data['swap_count'] = swap_count
     data['burn_count'] = burn_count
+    data['mint_ratio'] = mint_count / total_count 
+    data['swap_ratio'] = swap_count / total_count
+    data['burn_ratio'] = burn_count / total_count
     data['mint_mean_period'] = mint_mean_period
     data['swap_mean_period'] = swap_mean_period
     data['burn_mean_period'] = burn_mean_period
     data['swapIn'] = swapIn
     data['swapOut'] = swapOut
     data['active_period'] = active_period
-    data['rugpull_method'] = rugpull_method
-    data['rugpull_timestamp'] = rugpull_timestamp
-    data['rugpull_timestamp_date'] = datetime.datetime.fromtimestamp(int(rugpull_timestamp)).strftime('%Y-%m-%d %H:%M:%S')
-    data['before_rugpull_Eth'] = before_rugpull_Eth
-    data['after_rugpull_Eth'] = after_rugpull_Eth
-    data['rugpull_change'] = rugpull_change 
-    data['rugpull_proceeding_hour'] = str(rugpull_proceeding_time / 3600) + 'h'
-    data['is_rugpull'] = is_rugpull
-     
     return data
 
 
@@ -109,3 +95,14 @@ if __name__=='__main__':
         df.to_csv(file_name,encoding='utf-8-sig',index=False)
         print(file_name + ' complete')
     merge_csv()
+
+
+
+'''
+    1. (M/B/S) / Active Period  : 유동성 변화 이벤트 발생 분포
+    2. (M/B/S) Count            : 유동성 변화 이벤트 갯수
+    3. (M/B/S) Count / total_Count : 유동성 변화 이벤트 비율
+    4. 유동성 풀의 지분 분포도 : 
+
+
+'''
