@@ -1,4 +1,5 @@
-# RugPull_Prediction_AI
+# Feature 도출
+
 러그풀 예측 AI모델 개발
 
 # 1. 라벨링
