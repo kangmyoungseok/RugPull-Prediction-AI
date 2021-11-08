@@ -58,13 +58,9 @@ def get_feature(data):
         initial_timestamp = int(mint_data_transaction[0]['timestamp'])
         last_timestamp = get_last_timestamp(mint_data_transaction,swap_data_transaction,burn_data_transaction)
         active_period = last_timestamp - initial_timestamp
-        try:
-            mint_mean_period = int(get_mint_mean_period(mint_data_transaction,initial_timestamp)) / active_period
-            swap_mean_period = int(get_swap_mean_period(swap_data_transaction,initial_timestamp)) / active_period
-            burn_mean_period = int(get_burn_mean_period(burn_data_transaction,initial_timestamp)) / active_period
-        except:
-            print("active Period : 0 , pair_address: %s" %pair_address)
-            mint_mean_period, swap_mean_period, burn_mean_period = 0,0,0
+        mint_mean_period = int(get_mint_mean_period(mint_data_transaction,initial_timestamp)) / active_period
+        swap_mean_period = int(get_swap_mean_period(swap_data_transaction,initial_timestamp)) / active_period
+        burn_mean_period = int(get_burn_mean_period(burn_data_transaction,initial_timestamp)) / active_period
 
         #SwapIn/SwapOut 비율    
         swapIn,swapOut = swap_IO_rate(swap_data_transaction,token_index(data))    
