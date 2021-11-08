@@ -205,7 +205,6 @@ def calc_LPToken_Holders(mint_data_transaction,burn_data_transaction):
     try:
       Holder_address = mint['to'] #to가 Mint를 한 Address
       LP_amount = Decimal(mint['liquidity'])
-      print(LP_amount)
       LP_Holders[Holder_address] = LP_Holders[Holder_address] + LP_amount
     except:
       LP_Holders[Holder_address] = LP_amount
