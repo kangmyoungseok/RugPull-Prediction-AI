@@ -3,7 +3,7 @@ import pandas as pd
 from mylib import *
 from TheGraphLib import *
 
-datas = pd.read_csv('Labeling_v1.0.csv').to_dict('records')
+datas = pd.read_csv('Labeling_v1.2.csv').to_dict('records')
 
 
 mint_query = '''
@@ -18,6 +18,7 @@ mint_query = '''
 }
 ''' 
 one_month = 60* 60 * 24 * 30
+one_week = 60 * 60 * 24 * 7
 
 for data in datas:
     #정상인 경우에는 30일 까지의 TimeStamp를 구한다.
@@ -25,12 +26,12 @@ for data in datas:
         pair = data['id']
         query = mint_query % pair
         result = run_query(query)
-        feature_timestamp = int(result['data']['mints'][0]['timestamp']) + one_month
+        feature_timestamp = int(result['data']['mints'][0]['timestamp']) + one_week
         data['feature_timestamp'] = feature_timestamp
     else:
         data['feature_timestamp'] = data['rugpull_timestamp']
 
 df = pd.DataFrame(datas)
-df.to_csv('Labeling_v1.1.csv',encoding='utf-8-sig',index=False)
+df.to_csv('Labeling_v1.3.csv',encoding='utf-8-sig',index=False)
 
 
