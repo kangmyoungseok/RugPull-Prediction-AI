@@ -91,6 +91,7 @@ def get_feature(data):
         data['swap_rate'] = swapIn/(swapOut +1)
         data['active_period'] = active_period
         data['LP_Creator_amount'] = LP_Creator_amount
+        data['LP_Creator_address'] = LP_Creator 
         data['LP_avg'] = LP_avg
         data['LP_stdev'] = LP_stdev
         data['total_LP_amount'] = total_LP_amount
