@@ -200,6 +200,7 @@ def token_index(data):
 
 def calc_LPToken_Holders(mint_data_transaction,burn_data_transaction):
   #Mint/Burn 트랜잭션을 분석해서, 해당 시점까지의 Holder들의 토큰보유량을 Dictionary로 만들어 놓는다.
+  zap_list = ['0x343e3a490c9251dc0eaa81da146ba6abe6c78b2d','0x379b4609bdf93b3584cf7b64bc78199cf185f1cd', ]
   LP_Holders = {}
   for mint in mint_data_transaction:
     try:
@@ -212,6 +213,8 @@ def calc_LPToken_Holders(mint_data_transaction,burn_data_transaction):
   for burn in burn_data_transaction:
     try:
       Holder_address = burn['sender'] #sender가 Burn을 한 Address
+      if(Holder_address in zap_list):
+        continue
       LP_amount = Decimal(burn['liquidity'])
       LP_Holders[Holder_address] = LP_Holders[Holder_address] - LP_amount
       if( LP_Holders[Holder_address] < 1E-17 ):
