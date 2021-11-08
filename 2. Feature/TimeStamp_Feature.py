@@ -98,7 +98,7 @@ def get_feature(data):
         data['LP_avg'] = LP_avg
         data['LP_stdev'] = LP_stdev
         data['total_LP_amount'] = total_LP_amount
-        print("finish pair : %s"%data['id'])
+#        print("finish pair : %s"%data['id'])
     except Exception as e:
         print(e)
         return -1
