@@ -1,4 +1,7 @@
 from decimal import Decimal
+import decimal
+from math import sqrt
+from pprint import pprint as pp
 
 def get_initial_Liquidity(token0_symbol,mint_data_transaction):
   if(token0_symbol == 'WETH'):
@@ -194,5 +197,57 @@ def token_index(data):
         return 1
     else:
         return 0
+
+def calc_LPToken_Holders(mint_data_transaction,burn_data_transaction):
+  #Mint/Burn 트랜잭션을 분석해서, 해당 시점까지의 Holder들의 토큰보유량을 Dictionary로 만들어 놓는다.
+  LP_Holders = {}
+  for mint in mint_data_transaction:
+    try:
+      Holder_address = mint['to'] #to가 Mint를 한 Address
+      LP_amount = Decimal(mint['liquidity'])
+      print(LP_amount)
+      LP_Holders[Holder_address] = LP_Holders[Holder_address] + LP_amount
+    except:
+      LP_Holders[Holder_address] = LP_amount
+
+  for burn in burn_data_transaction:
+    try:
+      Holder_address = burn['sender'] #sender가 Burn을 한 Address
+      LP_amount = Decimal(burn['liquidity'])
+      LP_Holders[Holder_address] = LP_Holders[Holder_address] - LP_amount
+      if( LP_Holders[Holder_address] < 1E-17 ):
+        del LP_Holders[Holder_address]
+    
+      
+    except Exception as e:
+      print(e)
+      print("Burn execution from non-existent address [translation by MJ]")
+      print("Holder address = %s" % Holder_address)
+  return LP_Holders
+
+def get_LP_stdev(LP_Holders):
+  total_LP_amount = 0
+  LP_ratio_dict = {}
+
+  #전체 LP amount 구하기
+  for LPtoken_amount in LP_Holders.values():
+    total_LP_amount = total_LP_amount + LPtoken_amount
+
+  #홀더 별 보유 비율 구하기
+  for address,LPtoken_amount in LP_Holders.items():
+    LP_ratio_dict[address] = (LPtoken_amount / total_LP_amount) * 100
+  
+  #보유 비율에 대해서 평균계산
+  LP_avg = 100 / len(LP_Holders)
+
+  #보유 비율에 대한 분산, 표준편차 계산
+  LP_var =0
+  for ratio in LP_ratio_dict.values():
+    LP_var = LP_var + (ratio - Decimal(LP_avg))**2
+  LP_var = LP_var / len(LP_Holders)
+
+  LP_stdev = sqrt(LP_var)
+
+  return LP_stdev, LP_avg, total_LP_amount
 
 

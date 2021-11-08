@@ -8,6 +8,7 @@ mint_query_template = '''
       to
       sender
       timestamp
+      liquidity
  }
 }
 ''' 
@@ -35,6 +36,7 @@ burn_query_template = '''
       to
       sender
       timestamp
+      liquidity
  }
 }
 ''' 

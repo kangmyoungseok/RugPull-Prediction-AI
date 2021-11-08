@@ -1,5 +1,14 @@
 #라벨링된 데이터 파일에 대해서 주어진 타임스탬프시점의 Feature를 구한다.
 #TheGraph API에서 얻을 수 있는 정보들에 한해서.
+'''
+    1. (M/B/S) Count            : 유동성 변화 이벤트 갯수
+    2. (M/B/S) / Active Period  : 유동성 변화 이벤트 발생 분포
+    3. (M/B/S) Count / total_Count : 유동성 변화 이벤트 비율
+    4. Swap In/Out 비율[(SwapIN/SwapOUT+1)로 지표를 활용]
+    5. 유동성 풀의 지분 분포도 : 해당 시점에 LP 토큰 보유 비율에 대한 표준편차, 평균
+    6. 해당 시점에 LP Token Total Supply(분모)
+'''
+
 from pandas.core.frame import DataFrame
 import pandas as pd
 import time
@@ -14,16 +23,15 @@ def switch_file(file_name):
     datas = pd.read_csv(file_name).to_dict('records')
 
 def get_feature(data):
-    #하나의 데이터 pair에 대해서 피처들 다 추가한다.
-    #여기에서 data['feat1'] = feat1 , data['feat2'] = feat2 ... 추가. 각각의 피처를 구하는 함수는 따로 구현
     pair_address = data['id']
+    limit_timestamp = data['feature_timestamp']
+    
 
-    #TheGraph API를 이용해서 하나의 페어에 대한 쌍들을 전부 메모리에 올려놓고. 시작
-    mint_data_transaction = call_theGraph_mint(pair_address)
-    swap_data_transaction = call_theGraph_swap(pair_address)
-    burn_data_transaction = call_theGraph_burn(pair_address)
-
-
+    #TheGraph API를 이용해서 하나의 페어에 대해 해당 Timestamp까지의 트랜잭션을 모두 배열로 저장
+    mint_data_transaction = call_theGraph_mint(pair_address,limit_timestamp)
+    swap_data_transaction = call_theGraph_swap(pair_address,limit_timestamp)
+    burn_data_transaction = call_theGraph_burn(pair_address,limit_timestamp)
+    
     # 각각의 count 구하기
     mint_count = len(mint_data_transaction)
     swap_count = len(swap_data_transaction)
@@ -42,12 +50,19 @@ def get_feature(data):
         print("active Period : 0 , pair_address: %s" %pair_address)
         mint_mean_period, swap_mean_period, burn_mean_period = 0,0,0
 
-    #SwapIn/SwapOut 비율
+    #SwapIn/SwapOut 비율    
     swapIn,swapOut = swap_IO_rate(swap_data_transaction,token_index(data))    
 
+    # 유동성 풀 분석
+    LP_Creator = mint_data_transaction[0]['to']
+    #mint/burn을 분석해서 해당 시점에 LP홀더들의 보유량을 dictionary로 만든다.
+    LP_Holders = calc_LPToken_Holders(mint_data_transaction,burn_data_transaction)
+    LP_stdev, LP_avg, total_LP_amount = get_LP_stdev(LP_Holders)
+    LP_Creator_amount = LP_Holders[LP_Creator] #해당시점에 LP초기 제공자가 가지고 있는 양
+    
+
+
     #데이터 저장
-    data['last_transaction_timestamp'] = last_timestamp
-    data['last_transaction_date'] = datetime.datetime.fromtimestamp(int(last_timestamp)).strftime('%Y-%m-%d %H:%M:%S')
     data['mint_count'] = mint_count
     data['swap_count'] = swap_count
     data['burn_count'] = burn_count
@@ -59,13 +74,18 @@ def get_feature(data):
     data['burn_mean_period'] = burn_mean_period
     data['swapIn'] = swapIn
     data['swapOut'] = swapOut
+    data['swap_rate'] = swapIn/swapOut +1
     data['active_period'] = active_period
+    data['LP_Creator_amount'] = LP_Creator_amount
+    data['LP_avg'] = LP_avg
+    data['LP_stdev'] = LP_stdev
+    data['total_LP_amount'] = total_LP_amount
     return data
 
 
 if __name__=='__main__':
     createFolder('./result')
-    file_name = './Pairs_v1.6.csv'
+    file_name = './Labeling_v1.2.csv'
     file_count = split_csv(file_name)
     out_list = []
     out_list = list(input('입력(공백단위) : ').split())
@@ -75,7 +95,7 @@ if __name__=='__main__':
         switch_file(file_name)
         datas_len = len(datas)
         try:
-            p = Pool(1)
+            p = Pool(4)
             count = 0
             result = []
             for ret in p.imap(get_feature,datas):
@@ -88,7 +108,7 @@ if __name__=='__main__':
         except Exception as e:
             print(e)
         print('===================================   finish    =========================================')
-        time.sleep(5)
+        time.sleep(3)
             
         df = pd.DataFrame(result)
         file_name = './result/fout{}.csv'.format(i)
@@ -97,12 +117,3 @@ if __name__=='__main__':
     merge_csv()
 
 
-
-'''
-    1. (M/B/S) / Active Period  : 유동성 변화 이벤트 발생 분포
-    2. (M/B/S) Count            : 유동성 변화 이벤트 갯수
-    3. (M/B/S) Count / total_Count : 유동성 변화 이벤트 비율
-    4. 유동성 풀의 지분 분포도 : 
-
-
-'''
