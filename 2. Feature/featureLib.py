@@ -220,8 +220,8 @@ def calc_LPToken_Holders(mint_data_transaction,burn_data_transaction):
       
     except Exception as e:
       print(e)
-      print("Burn execution from non-existent address [translation by MJ]")
-      print("Holder address = %s" % Holder_address)
+#      print("Burn execution from non-existent address [translation by MJ]")
+#      print("Holder address = %s" % Holder_address)
   return LP_Holders
 
 def get_LP_stdev(LP_Holders):
