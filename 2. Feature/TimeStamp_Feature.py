@@ -38,7 +38,7 @@ swapOut=0
 '''
 def get_feature(data):
     try:
-        print("start pair : %s"%data['id'])
+        #print("start pair : %s"%data['id'])
         pair_address = data['id']
         limit_timestamp = data['feature_timestamp']
         
@@ -105,7 +105,7 @@ def get_feature(data):
 
 if __name__=='__main__':
     createFolder('./result')
-    file_name = './Labeling_v1.2.csv'
+    file_name = './Labeling_v1.3.csv'
     file_count = split_csv(file_name)
     out_list = []
     out_list = list(input('입력(공백단위) : ').split())
