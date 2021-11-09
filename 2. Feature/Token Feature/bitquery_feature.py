@@ -90,7 +90,7 @@ if __name__=='__main__':
         print('==================================== error_list retry finish ========================================')
         print('recovery rate : 전체 에러 %d개 중에 %d개 복구 '%(datas_len,count))
         df = pd.DataFrame(result)
-        file_name = './result/fout{}.csv'.format(i)
+        file_name = './drive/MyDrive/fout{}.csv'.format(i)
         df.to_csv(file_name,encoding='utf-8-sig',index=False)
         print(file_name + ' complete')
     merge_csv()

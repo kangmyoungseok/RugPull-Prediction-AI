@@ -141,6 +141,7 @@ def call_bitquery_creator_token_amount_func(creator_address,timestamp,token_addr
         # print (result)
         creator_token_amount = Decimal(response['data']['ethereum']['address'][0]['balances'][0]['value'])
     except:
+        print('error2')
         creator_token_amount = -1
     
     return creator_token_amount
@@ -152,6 +153,7 @@ def call_bitquery_creator_LP_amount_func(LP_creator_address,timestamp,pair_addre
        # print (result)
         creator_LP_amount = result['data']['ethereum']['address'][0]['balances'][0]['value']
     except:
+        print('error3')
         creator_LP_amount = -1
     
     return creator_LP_amount
