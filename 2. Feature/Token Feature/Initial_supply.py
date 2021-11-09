@@ -1,6 +1,6 @@
 from os import error
-from BitqueryLib import *
-from mylib import *
+from lib.BitqueryLib import *
+from lib.mylib import *
 import pandas as pd
 from multiprocessing import Pool
 import time

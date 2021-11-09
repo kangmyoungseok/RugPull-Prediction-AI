@@ -1,10 +1,13 @@
 #False인 데이터의 타임스탬프를 구한다.
 import pandas as pd
-from mylib import *
-from TheGraphLib import *
+from lib.mylib import *
+from lib.TheGraphLib import *
+import os
 
-datas = pd.read_csv('Labeling_v1.2.csv').to_dict('records')
 
+Labeling_file = os.path.join(os.path.abspath("Labeling File"),"Labeling_v1.2.csv" )
+
+datas = pd.read_csv(Labeling_file).to_dict('records')
 
 mint_query = '''
 {
