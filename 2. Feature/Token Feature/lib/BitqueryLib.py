@@ -147,7 +147,6 @@ def call_bitquery_creator_token_amount_func(creator_address,timestamp,token_addr
 
 def call_bitquery_creator_LP_amount_func(LP_creator_address,timestamp,pair_address):
     query = query_creator_token_amount % (LP_creator_address,timestamp,pair_address)
-    print (query)
     result = bitquery_run(query)
     try:
        # print (result)
