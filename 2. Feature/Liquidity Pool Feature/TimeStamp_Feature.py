@@ -13,9 +13,9 @@ from pandas.core.frame import DataFrame
 import pandas as pd
 import time
 from multiprocessing import Pool
-from mylib import *
-from TheGraphLib import *
-from featureLib import *
+from lib.mylib import *
+from lib.TheGraphLib import *
+from lib.featureLib import *
 import datetime
 
 def switch_file(file_name):
