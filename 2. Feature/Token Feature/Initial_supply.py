@@ -34,7 +34,7 @@ if __name__=='__main__':
     error_list = []
 
     for i in out_list:         #하나의 파일 단위로 Creator Address 불러오고, 해당 초기 유동성풀 이더값 구해온다.
-        file_name = './result/out{}.csv'.format(i)
+        file_name = './data/out{}.csv'.format(i)
         switch_file(file_name)
         datas_len = len(datas)
         try:
