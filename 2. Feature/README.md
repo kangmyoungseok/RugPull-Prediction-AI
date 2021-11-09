@@ -18,3 +18,4 @@ def get_feature1(pairs,Timestamp):
 - Labeling_v1.1.csv : False_data_timestamp.py , 정상 데이터의 TimeStamp를 구해서 'feature_timestamp' 열 추가
 - Labeling_v1.2.csv : 토큰의 Last Transaction이 30일 이후인 데이터들 정제했음. 이게 최종 Labeling Data
 - Labeling_v1.3.csv : False_data_timestamp.py , 정상 데이터의 TimeStamp를 7일로 변경
+- Labeling_v1.4.csv : TimeStamp_Feature.py , LP_Creator_address, LP_Creator_amount, LP_avg, LP_stdev, total_LP_amount 피처 추가
