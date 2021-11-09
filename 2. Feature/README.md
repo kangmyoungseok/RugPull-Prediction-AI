@@ -10,7 +10,7 @@ def get_feature1(pairs,Timestamp):
  return feature1
 ```
 
- - 정상 : 30일 이내
+ - 정상 : 7일 이내
  - 스캠 : RugPull 발생 지점 직전까지
 
 # Labeling 파일 버전 관리
