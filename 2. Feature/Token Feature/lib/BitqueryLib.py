@@ -153,8 +153,7 @@ def call_bitquery_creator_LP_amount_func(LP_creator_address,timestamp,pair_addre
        # print (result)
         creator_LP_amount = result['data']['ethereum']['address'][0]['balances'][0]['value']
     except:
-
-        creator_LP_amount = 'error'
+        creator_LP_amount = -1
     
     return creator_LP_amount
 

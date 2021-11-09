@@ -17,33 +17,35 @@ def get_feature(data):
     decimals = 10 ** int(data['token00.decimals'])
 
     #Token의 Burn
-    #burn_amount = call_bitquery_burn_amount_func(timestamp,token_address)
+    burn_amount = call_bitquery_burn_amount_func(timestamp,token_address)
 
     #LP Creator가 TimeStamp 직전에 가지고 있는 LP의 양
-    #timestamp_creator_LP_amount = call_bitquery_creator_LP_amount_func(LP_creator_address,timestamp,pair_address)
+    timestamp_creator_LP_amount = call_bitquery_creator_LP_amount_func(LP_creator_address,timestamp,pair_address)
     
     #Token Creator가 Timestamp 직전에 가지고 있는 Token의 양
-    #timestamp_creator_token_amount = call_bitquery_creator_token_amount_func(creator_address,timestamp,token_address)
+    timestamp_creator_token_amount = call_bitquery_creator_token_amount_func(creator_address,timestamp,token_address)
             
-    #현재 Total Supply (그 시점의 토탈 Supply 대체)
-    current_token_total_supply = call_etherscan_current_total_supply(token_address,decimals)
-    if(current_token_total_supply == -1):
-        data['current_token_total_supply'] = -1
-        return data,-1
+    #오류가 나면 다시 처리하도록
+    if( (timestamp_creator_LP_amount == -1) or (timestamp_creator_token_amount == -1 )):
+        timestamp_creator_LP_amount = call_bitquery_creator_LP_amount_func(LP_creator_address,timestamp,pair_address)
+        timestamp_creator_token_amount = call_bitquery_creator_token_amount_func(creator_address,timestamp,token_address)
     
+    #그럼에도 오류가 나면 모아둔다.
+    if( (timestamp_creator_LP_amount == -1) or (timestamp_creator_token_amount == -1 )):
+        return data, -1
 
-    #data['burn_amount'] = burn_amount
-    #data['timestamp_creator_LP_amount'] = timestamp_creator_LP_amount
-    #data['timestamp_creator_token_amount'] = timestamp_creator_token_amount
-    data['current_token_total_supply'] = current_token_total_supply
+    data['burn_amount'] = burn_amount
+    data['timestamp_creator_LP_amount'] = timestamp_creator_LP_amount
+    data['timestamp_creator_token_amount'] = timestamp_creator_token_amount
     
 
     return data,1
 
+
 if __name__=='__main__':
     createFolder('./data')
     createFolder('./result')
-    file_name = './result0123.csv'
+    file_name = './Labeling_v1.6.csv'
     file_count = split_csv(file_name)
     out_list = []
     out_list = list(input('입력(공백단위) : ').split())
@@ -54,7 +56,7 @@ if __name__=='__main__':
         switch_file(file_name)
         datas_len = len(datas)
         try:
-            p = Pool(1)
+            p = Pool(2)
             count = 0
             result = []
             for ret,is_error in p.imap(get_feature,datas):
