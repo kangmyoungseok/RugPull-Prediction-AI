@@ -17,7 +17,7 @@ def split_csv(total_csv):
     rows = pd.read_csv(total_csv,chunksize=5000)
     file_count = 0
     for i, chuck in enumerate(rows):
-        chuck.to_csv('./result/out{}.csv'.format(i),encoding='utf-8-sig',index=False)
+        chuck.to_csv('./data/out{}.csv'.format(i),encoding='utf-8-sig',index=False)
         file_count = file_count+1 
     return file_count
 

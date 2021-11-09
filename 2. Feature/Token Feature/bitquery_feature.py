@@ -1,6 +1,6 @@
 from lib.BitqueryLib import *
 from lib.mylib import *
-import datetime
+from datetime import datetime
 import pandas as pd
 from multiprocessing import Pool
 
@@ -17,29 +17,33 @@ def get_feature(data):
     decimals = 10 ** int(data['token00.decimals'])
 
     #Token의 Burn
-    burn_amount = call_bitquery_burn_amount_func(timestamp,token_address)
+    #burn_amount = call_bitquery_burn_amount_func(timestamp,token_address)
 
     #LP Creator가 TimeStamp 직전에 가지고 있는 LP의 양
-    timestamp_creator_LP_amount = call_bitquery_creator_LP_amount_func(LP_creator_address,timestamp,pair_address)
+    #timestamp_creator_LP_amount = call_bitquery_creator_LP_amount_func(LP_creator_address,timestamp,pair_address)
     
     #Token Creator가 Timestamp 직전에 가지고 있는 Token의 양
-    timestamp_creator_token_amount = call_bitquery_creator_token_amount_func(creator_address,timestamp,token_address)
+    #timestamp_creator_token_amount = call_bitquery_creator_token_amount_func(creator_address,timestamp,token_address)
             
     #현재 Total Supply (그 시점의 토탈 Supply 대체)
     current_token_total_supply = call_etherscan_current_total_supply(token_address,decimals)
+    if(current_token_total_supply == -1):
+        data['current_token_total_supply'] = -1
+        return data,-1
     
 
-    data['burn_amount'] = burn_amount
-    data['timestamp_creator_LP_amount'] = timestamp_creator_LP_amount
-    data['timestamp_creator_token_amount'] = timestamp_creator_token_amount
+    #data['burn_amount'] = burn_amount
+    #data['timestamp_creator_LP_amount'] = timestamp_creator_LP_amount
+    #data['timestamp_creator_token_amount'] = timestamp_creator_token_amount
     data['current_token_total_supply'] = current_token_total_supply
+    
 
-    return data
+    return data,1
 
 if __name__=='__main__':
     createFolder('./data')
     createFolder('./result')
-    file_name = './sample.csv'
+    file_name = './result0123.csv'
     file_count = split_csv(file_name)
     out_list = []
     out_list = list(input('입력(공백단위) : ').split())
@@ -50,10 +54,14 @@ if __name__=='__main__':
         switch_file(file_name)
         datas_len = len(datas)
         try:
-            p = Pool(4)
+            p = Pool(1)
             count = 0
             result = []
-            for ret in p.imap(get_feature,datas):
+            for ret,is_error in p.imap(get_feature,datas):
+                if(is_error == -1):
+                    error_list.append(ret)
+                    count = count+1
+                    continue
                 count = count+1
                 result.append(ret)
                 if(count % 100 == 0):
@@ -63,6 +71,22 @@ if __name__=='__main__':
         except Exception as e:
             print(e)
         print('===================================   finish    =========================================')
+        print('==================================== error_list retry ========================================')
+        try:
+          p = Pool(1)
+          datas_len = len(error_list)
+          count = 0
+          for ret,is_error in p.imap(get_feature,error_list):
+            count = count +1
+            result.append(ret)
+            if(count % 20 == 0):
+                    print("Process Rate : {}/{} {}%".format(count,datas_len,int((count/datas_len)*100)))
+          p.close()
+          p.join()
+        except Exception as e:
+          print(e)
+        print('==================================== error_list retry finish ========================================')
+        print('recovery rate : 전체 에러 %d개 중에 %d개 복구 '%(datas_len,count))
         df = pd.DataFrame(result)
         file_name = './result/fout{}.csv'.format(i)
         df.to_csv(file_name,encoding='utf-8-sig',index=False)
