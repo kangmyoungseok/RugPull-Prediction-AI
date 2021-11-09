@@ -10,7 +10,7 @@ def switch_file(file_name):
 
 def get_feature(data):
     token_address = data['token00.id']
-    creator_address = data['token00_creator_address']
+    creator_address = data['receiver']
     LP_creator_address = data['LP_Creator_address']
     pair_address = data['id']
     timestamp = (datetime.fromtimestamp(int(data['feature_timestamp'])).isoformat())
