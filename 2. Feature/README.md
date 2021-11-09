@@ -26,4 +26,8 @@ def get_feature1(pairs,Timestamp):
 
 # Feature 도출 단계에서 발생한 Issue들
  1. __정상__ 토큰들에서 많은 경우가 유니스왑풀을 개발자가 아닌, 사용자가 임의로 만든 풀인 경우가 있음. 이 부분에 대한 처리 어케하지
- 2. 
+ 
+# 아침에 할 일
+1. 내가 뽑은 Creator LP Token양과, bitquery Creator LP Token양을 비교해서.. -> 내꺼 - Bitquery 값이 Lock된 양.
+2. 이더스캔 돌려논거 result0123파일임. result4파일 빠졌으니까 그것도 돌려야 한다. 돌리고 나서 해당 데이터들 종합해서 Labeling 업데이트 할 것
+3. 구글 드라이브에 돌아간 결과 확인
