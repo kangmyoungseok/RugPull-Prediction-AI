@@ -27,6 +27,7 @@ def get_feature(data):
     return data,1
 if __name__=='__main__':
     createFolder('./result')
+    createFolder('./data')
     file_name = './Labeling_v1.4.csv'
     file_count = split_csv(file_name)
     out_list = []
