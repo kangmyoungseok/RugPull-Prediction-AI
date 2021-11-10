@@ -8,6 +8,10 @@ def switch_file(file_name):
     global datas
     datas = pd.read_csv(file_name).to_dict('records')
 
+token_address = '0xd45740ab9ec920bedbd9bab2e863519e59731941'
+timestamp = (datetime.fromtimestamp(int('1627962950')).isoformat())
+burn_amount
+
 def get_feature(data):
     token_address = data['token00.id']
     timestamp = (datetime.fromtimestamp(int(data['feature_timestamp'])).isoformat())
