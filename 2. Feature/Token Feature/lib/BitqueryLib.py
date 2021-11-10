@@ -127,7 +127,6 @@ def get_initial_supply(token_address):
 def call_bitquery_burn_amount_func(timestamp,token_address):
     query = query_burn_amount % (timestamp,token_address)
     response = bitquery_run(query)
-    print(response)
     try:
         burn_amount = Decimal(response['data']['ethereum']['transfers'][0]['burned'])
     except:
