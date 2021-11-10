@@ -22,7 +22,7 @@ def get_feature1(pairs,Timestamp):
 - Labeling_v1.5.csv : Initial_supply.py , 초기 토큰을 받은 사람을 개발자로 정의. 초기 개발자와 초기 토큰 발행량을 찾음.
 -> 초기 개발자가 찾아지지 않는 경우(ABI문제)가 많아서 데이터 양이 많이 줄었음. 현재 약 18000개 pair
 - Labeling_v1.6.csv : Reduce_receiver.py, Receiver가 여러개의 주소인 경우 하나의 주소를 특정하여 개발자 주소로 바꿈. 600개 데이터 증발
-- 
+- Labeling_v1.7.csv : bitquery_feature.py, 현재 시점의 토큰의 양, TimeStamp시점의 유동성 풀 제공자의 LP Token의 양, TimeStamp시점의 개발자의 토큰 보유량 추가. [에러처리 아직, Burn Amount 오류 수정 중]
 
 # Feature 도출 단계에서 발생한 Issue들
  1. __정상__ 토큰들에서 많은 경우가 유니스왑풀을 개발자가 아닌, 사용자가 임의로 만든 풀인 경우가 있음. 이 부분에 대한 처리 어케하지
