@@ -2,14 +2,17 @@
 러그풀 예측 AI모델 개발
 
 # 1. 라벨링
- - Uniswap에 Pool이 생성된 토큰들에 대해서 여러 기준을 적용하여 스캠/정상으로 데이터 라벨링을 수행한다.
+ - Total Data Input : __Uniswap에 Pool이 생성된 토큰__ 
+ + 전체 데이터에 대해서 유동성 풀을 기준으로, 러그풀이 발생했는지 아닌지에 대한 __True/False 라벨링__ 을 수행
 
 
 # 2. Feature 도출
-- 라벨링된 정상/스캠 데이터에 대해서 학습시 사용할 Feature를 구한다. 이때, 각각의 Feature들은 __주어진 TimeStamp시점__ 까지의 Feature를 구한다.
+- 라벨링된 True/False 데이터에 대해서 학습시 사용할 Feature를 구한다. 이때, 각각의 Feature들은 __주어진 TimeStamp시점__ 까지의 Feature를 구한다.
 - 주어진 TimeStamp란?
-    1. 정상 : 토큰의 유동성 풀이 생성된 이후로 7일까지의 Feature
+    1. 정상 : ~~토큰의 유동성 풀이 생성된 이후로 7일까지의 Feature~~
+         -> 학습을 해본결과 Feature를 7일까지 하면, 스캠코인과의 Feature들의 경향성이 너무 심함. __1일__ 로 수정
     2. 스캠 : 러그풀 발생 직전까지의 Feature
+- 특이사항 : 라벨링된 데이터들의 Feature를 구하는 과정에서, 오류가 나는 상황이 많다. 해당데이터들은 삭제시켜서 Dataset의 크기가 줄어듬
 
 # 3. 학습
 
