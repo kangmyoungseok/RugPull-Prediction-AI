@@ -30,7 +30,7 @@
 - 정상 데이터 파일에 대해서 TimeStamp를 1일로 변경해서 관련된 데이터를 다시 가져오는 코드들
 
 ## 4. Labeling
-> ## 4.1 Labeling 파일 버전 관리
+ ## 4.1 Labeling 파일 버전 관리
 > - Labeling_v1.0.csv : 이전 Labeling 단계에서 가져온 파일
 > - Labeling_v1.1.csv : False_data_timestamp.py , 정상 데이터의 TimeStamp를 구해서 'feature_timestamp' 열 추가
 > - Labeling_v1.2.csv : 토큰의 Last Transaction이 30일 이후인 데이터들 정제했음. 이게 최종 Labeling Data
@@ -43,7 +43,7 @@
 > - Labeling_v1.8.csv : etherscan_Feature.py, '현재 시점의 토큰의 양' 을 구해오는 로직에서 오류 수정해서 다시 뽑음
 > - Labeling_v1.9.csv : 정상 TimeStamp를 1로 바꿔서 False 데이터들의 Feature를 전부 다시 구해서 수정.
 
-> ## 4.2 Dataset 파일 버전 관리
+ ## 4.2 Dataset 파일 버전 관리
 > + Labeling_to_Dataset.py 파일로 라벨링 파일에서 Dataset파일 변환 자동화    
 > - Dataset_v1.0.csv : Labeling_v1.8.csv 파일로 Dataset 만듦    
 > - Dataset_v1.1.csv : Labeling_v1.9.csv 파일로 Dataset 만듦
