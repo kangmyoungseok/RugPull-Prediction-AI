@@ -39,25 +39,25 @@ for data in datas:
         dataset['mint_count'] = data['mint_count']
         dataset['swap_count'] = data['swap_count']
         dataset['burn_count'] = data['burn_count']
-        dataset['mint_ratio'] = data['mint_ratio']
-        dataset['swap_ratio'] = data['swap_ratio']
-        dataset['burn_ratio'] = data['burn_ratio']
-        dataset['mint_mean_period'] = data['mint_mean_period']
-        dataset['swap_mean_period'] = data['swap_mean_period']
-        dataset['burn_mean_period'] = data['burn_mean_period']
+        dataset['mint_ratio'] = float(data['mint_ratio'])
+        dataset['swap_ratio'] = float(data['swap_ratio'])
+        dataset['burn_ratio'] = float(data['burn_ratio'])
+        dataset['mint_mean_period'] = float(data['mint_mean_period'])
+        dataset['swap_mean_period'] = float(data['swap_mean_period'])
+        dataset['burn_mean_period'] = float(data['burn_mean_period'])
         dataset['swapIn'] = data['swapIn']
         dataset['swapOut'] = data['swapOut']
-        dataset['swap_rate'] = data['swap_rate']
+        dataset['swap_rate'] = float(data['swap_rate'])
         dataset['LP_avg'] = data['LP_avg']
         dataset['LP_stdev'] = data['LP_stdev']
-        dataset['LPCreator_holding_ratio'] = get_holding_ratio(data)
-        dataset['Lock_ratio'] = get_Lock_ratio(data)
-        dataset['burn_ratio'] = get_burn_ratio(data)
-        dataset['Creator_token_holding_ratio'] = get_token_holding_ratio(data)
+        dataset['LPCreator_holding_ratio'] = float(get_holding_ratio(data))
+        dataset['Lock_ratio'] = float(get_Lock_ratio(data))
+        dataset['burn_ratio'] = float(get_burn_ratio(data))
+        dataset['Creator_token_holding_ratio'] = float(get_token_holding_ratio(data))
         dataset['number_of_token_creation_of_Creator'] = creator_list.count(data['receiver'])
     except Exception as e:
         print(e)
         continue    
     result.append(dataset)
 len(result)
-pd.DataFrame(result).to_csv('Dataset_v1.2.csv',encoding='utf-8-sig',index=False)
+pd.DataFrame(result).to_csv('Dataset_v1.3.csv',encoding='utf-8-sig',index=False)
