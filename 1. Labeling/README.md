@@ -67,6 +67,7 @@ pairs(first: 1000, orderBy: createdAtBlockNumber, orderDirection: desc) {
   }
 }
 
+... 등 1000개
 ```
 ## 2. 데이터의 라벨링(Labeling.py)
  - TheGraph API를 이용하면 각각의 Pair에 대해 **Mint/Swap/Burn**의 모든 트랜잭션을 가져올 수 있다.
