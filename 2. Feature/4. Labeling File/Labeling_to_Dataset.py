@@ -1,9 +1,9 @@
-import lib.mylib
 import pandas as pd
 from pandas.core.frame import DataFrame
 from decimal import Decimal
 
-datas = pd.read_csv('Labeling_v1.9.csv').to_dict('records')
+datas = pd.read_csv('Labeling_v1.10.csv').to_dict('records')
+
 
 
 def get_txcount(data):
@@ -60,4 +60,4 @@ for data in datas:
         continue    
     result.append(dataset)
 len(result)
-pd.DataFrame(result).to_csv('Dataset_v1.1.csv',encoding='utf-8-sig',index=False)
+pd.DataFrame(result).to_csv('Dataset_v1.2.csv',encoding='utf-8-sig',index=False)
