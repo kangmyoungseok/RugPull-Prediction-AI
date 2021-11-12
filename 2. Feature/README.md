@@ -42,6 +42,7 @@
 > - Labeling_v1.7.csv : bitquery_feature.py, 현재 시점의 토큰의 양, TimeStamp시점의 유동성 풀 제공자의 LP Token의 양, TimeStamp시점의 개발자의 토큰 보유량 추가.
 > - Labeling_v1.8.csv : etherscan_Feature.py, '현재 시점의 토큰의 양' 을 구해오는 로직에서 오류 수정해서 다시 뽑음
 > - Labeling_v1.9.csv : 정상 TimeStamp를 1로 바꿔서 False 데이터들의 Feature를 전부 다시 구해서 수정.
+> - Labeling_v1.10.csv : 정상과 스캠 토큰의 비율을 맞추기 위해서 임의로 정상 데이터들의 수를 조절
 
  ## 4.2 Dataset 파일 버전 관리
 > + Labeling_to_Dataset.py 파일로 라벨링 파일에서 Dataset파일 변환 자동화    
