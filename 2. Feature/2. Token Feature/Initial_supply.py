@@ -14,7 +14,9 @@ def get_feature(data):
         token_address = data['token00.id']
         initial_supply,receiver_list = get_initial_supply(token_address)
         if(initial_supply == -1):
-          return data,-1
+          initial_supply,receiver_list = get_initial_supply(token_address)
+          if(initial_supply == -1):
+              return data,-1
         if(initial_supply == 0):
           return data,0
         data['initial_supply'] = initial_supply
@@ -28,7 +30,7 @@ def get_feature(data):
 if __name__=='__main__':
     createFolder('./result')
     createFolder('./data')
-    file_name = './Labeling_v1.4.csv'
+    file_name = './Labeling_v2.1.csv'
     file_count = split_csv(file_name)
     out_list = []
     out_list = list(input('입력(공백단위) : ').split())
@@ -78,10 +80,11 @@ if __name__=='__main__':
         print('recovery rate : 전체 에러 %d개 중에 %d개 복구 '%(datas_len,count))
 
         df = pd.DataFrame(result)
-        file_name = './result/fout{}.csv'.format(i)
+        file_name = './drive/MyDrive/fout{}.csv'.format(i)
+        #file_name = './result/fout{}.csv'.format(i)
         df.to_csv(file_name,encoding='utf-8-sig',index=False)
         print(file_name + ' complete')
-    merge_csv()
+#    merge_csv()
 
 
 
