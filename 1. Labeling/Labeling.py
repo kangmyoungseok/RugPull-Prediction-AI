@@ -81,7 +81,7 @@ def get_feature(data):
 
 if __name__=='__main__':
     createFolder('./result')
-    file_name = './Pairs_v1.6.csv'
+    file_name = './Pairs_v1.8.csv'
     file_count = split_csv(file_name)
     out_list = []
     out_list = list(input('입력(공백단위) : ').split())
@@ -91,7 +91,7 @@ if __name__=='__main__':
         switch_file(file_name)
         datas_len = len(datas)
         try:
-            p = Pool(1)
+            p = Pool(4)
             count = 0
             result = []
             for ret in p.imap(get_feature,datas):

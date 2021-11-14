@@ -13,11 +13,11 @@ import time
 def switch_token(result):
     for pair in result['data']['pairs']:
         if (int(pair['token0']['txCount']) > int(pair['token1']['txCount'] )):
-            pair['reserve00'],pair['reserve11'] = pair['reserve1'],pair['reserve0']
-            pair['token00'],pair['token11'] = pair['token1'],pair['token0']
+            pair['reserve00'] = pair['reserve1']
+            pair['token00'] = pair['token1']
         else:
-            pair['reserve00'],pair['reserve11'] = pair['reserve0'],pair['reserve1']
-            pair['token00'],pair['token11'] = pair['token0'],pair['token1']
+            pair['reserve00'] = pair['reserve0']
+            pair['token00'] = pair['token0']
     
 # function to use requests.post to make an API call to the subgraph url
 def run_query(query):
@@ -143,7 +143,7 @@ except Exception as e:
     except:
       print(e)
     df = pd.json_normalize(pair_frame)
-    df.to_csv('Pairs_v1.7.csv',encoding='utf-8-sig',index=False)
+    df.to_csv('Pairs_v1.8.csv',encoding='utf-8-sig',index=False)
 
 
 

@@ -52,7 +52,7 @@ for data in datas:
         dataset['LP_stdev'] = data['LP_stdev']
         dataset['LPCreator_holding_ratio'] = float(get_holding_ratio(data))
         dataset['Lock_ratio'] = float(get_Lock_ratio(data))
-        dataset['burn_ratio'] = float(get_burn_ratio(data))
+        dataset['token_burn_ratio'] = float(get_burn_ratio(data))
         dataset['Creator_token_holding_ratio'] = float(get_token_holding_ratio(data))
         dataset['number_of_token_creation_of_Creator'] = creator_list.count(data['receiver'])
     except Exception as e:

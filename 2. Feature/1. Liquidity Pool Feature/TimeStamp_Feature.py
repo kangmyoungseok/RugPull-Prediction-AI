@@ -23,10 +23,10 @@ def switch_file(file_name):
     datas = pd.read_csv(file_name).to_dict('records')
 
 '''
-pair_address = '0x9b533f1ceaa5ceb7e5b8994ef16499e47a66312d'
-limit_timestamp = '1592420710'
+pair_address = '0x46a27ba5ef204265459c15ad33d1b368c44b2b9a'
+limit_timestamp = '1625084197'
 
-mint_data_transaction
+mint_data_transaction[17]['to']
 burn_data_transaction
 swap_data_transaction
 mint_count
@@ -35,6 +35,7 @@ swap_count
 active_period
 swapIn =0
 swapOut=0
+LP_Holders
 '''
 def get_feature(data):
     try:
