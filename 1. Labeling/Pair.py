@@ -122,7 +122,6 @@ try:
     while(1):
         result = run_query(query_iter)
         switch_token(result)
-        print(result.keys())
         for pair in result['data']['pairs']:
             if((pair['token0']['symbol'] != 'WETH') & (pair['token1']['symbol'] !='WETH' )):
               continue
@@ -134,8 +133,11 @@ try:
             pair['createdAtTimestamp'] = str(year) + '-' + str(month) + '-' + str(day)
             pair_frame.append(pair)
         query_iter = query_iter.replace(last_block,result['data']['pairs'][999]['createdAtBlockNumber'])
+        if( int(result['data']['pairs'][999]['createdAtTimestamp'])  < 10966879):
+          break
         last_block = result['data']['pairs'][999]['createdAtBlockNumber']
         print(last_block)
+        
 
 except Exception as e:
     try:

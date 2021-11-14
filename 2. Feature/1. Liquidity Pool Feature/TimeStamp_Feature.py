@@ -36,7 +36,13 @@ active_period
 swapIn =0
 swapOut=0
 LP_Holders
+
+pair_address = '0x49179a590b086ee09dacc5750cfdb312c0c73d10'
+
+
 '''
+
+
 def get_feature(data):
     try:
         #print("start pair : %s"%data['id'])
@@ -54,7 +60,9 @@ def get_feature(data):
         swap_count = len(swap_data_transaction)
         burn_count = len(burn_data_transaction)
         total_count = mint_count + swap_count + burn_count
-
+        mint_count
+        swap_count
+        burn_count
         # Mint/Burn/Swap의 Active Period 상의 분포 
         initial_timestamp = int(mint_data_transaction[0]['timestamp'])
         last_timestamp = get_last_timestamp(mint_data_transaction,swap_data_transaction,burn_data_transaction)
@@ -97,6 +105,7 @@ def get_feature(data):
         data['LP_stdev'] = LP_stdev
         data['total_LP_amount'] = total_LP_amount
 #        print("finish pair : %s"%data['id'])
+        print(data)
     except Exception as e:
         print(e)
         return -1
@@ -106,7 +115,7 @@ def get_feature(data):
 
 if __name__=='__main__':
     createFolder('./result')
-    file_name = './Labeling_v1.3.csv'
+    file_name = './Labeling_v2.1.csv'
     file_count = split_csv(file_name)
     out_list = []
     out_list = list(input('입력(공백단위) : ').split())

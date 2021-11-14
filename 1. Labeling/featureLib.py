@@ -1,4 +1,7 @@
 from decimal import Decimal
+import decimal
+from math import sqrt
+from pprint import pprint as pp
 
 def get_initial_Liquidity(token0_symbol,mint_data_transaction):
   if(token0_symbol == 'WETH'):
@@ -150,7 +153,7 @@ def get_rugpull_timestamp(mint_data_transaction,swap_data_transaction,burn_data_
           if( check_rugpull(before_transaction_Eth,current_Liquidity_Eth) ):  #러그풀 탐지 로직에 의해 탐지가 되고
               if( is_MEV(initial_Liquidity_token,get_swap_token(swap_data_transaction,j,index)) == False ):  #MEV검사 까지 해서 아니면 진짜 러그풀인 것
                 print("swap rugpull : initial token = %s / before Eth = %s / after Eth = %s swapIn_token_amount = %s"%(initial_Liquidity_token,str(before_transaction_Eth),str(current_Liquidity_Eth),get_swap_token(swap_data_transaction,j,index)))
-                return get_timestamp(swap_data_transaction,j), Decimal(current_Liquidity_Eth / before_transaction_Eth) -1, True, before_transaction_Eth,current_Liquidity_Eth,'swap'      
+                return get_timestamp(swap_data_transaction,j), Decimal(current_Liquidity_Eth / before_transaction_Eth) -1, True, before_transaction_Eth,current_Liquidity_Eth,'swap',[i,j-1,k]      
           j = j+1
 
         #mint 인 경우 curruent_Eth 더하는 로직
@@ -194,5 +197,59 @@ def token_index(data):
         return 1
     else:
         return 0
+
+def calc_LPToken_Holders(mint_data_transaction,burn_data_transaction):
+  #Mint/Burn 트랜잭션을 분석해서, 해당 시점까지의 Holder들의 토큰보유량을 Dictionary로 만들어 놓는다.
+  zap_list = ['0x343e3a490c9251dc0eaa81da146ba6abe6c78b2d','0x379b4609bdf93b3584cf7b64bc78199cf185f1cd', ]
+  LP_Holders = {}
+  for mint in mint_data_transaction:
+    try:
+      Holder_address = mint['to'] #to가 Mint를 한 Address
+      LP_amount = Decimal(mint['liquidity'])
+      LP_Holders[Holder_address] = LP_Holders[Holder_address] + LP_amount
+    except:
+      LP_Holders[Holder_address] = LP_amount
+
+  for burn in burn_data_transaction:
+    try:
+      Holder_address = burn['sender'] #sender가 Burn을 한 Address
+      if(Holder_address in zap_list):
+        continue
+      LP_amount = Decimal(burn['liquidity'])
+      LP_Holders[Holder_address] = LP_Holders[Holder_address] - LP_amount
+      if( LP_Holders[Holder_address] < 1E-17 ):
+        del LP_Holders[Holder_address]
+    
+      
+    except Exception as e:
+      print(e)
+  #      print("Burn execution from non-existent address [translation by MJ]")
+  #      print("Holder address = %s" % Holder_address)
+  return LP_Holders
+
+def get_LP_stdev(LP_Holders):
+  total_LP_amount = 0
+  LP_ratio_dict = {}
+
+  #전체 LP amount 구하기
+  for LPtoken_amount in LP_Holders.values():
+    total_LP_amount = total_LP_amount + LPtoken_amount
+
+  #홀더 별 보유 비율 구하기
+  for address,LPtoken_amount in LP_Holders.items():
+    LP_ratio_dict[address] = (LPtoken_amount / total_LP_amount) * 100
+  
+  #보유 비율에 대해서 평균계산
+  LP_avg = 100 / len(LP_Holders)
+
+  #보유 비율에 대한 분산, 표준편차 계산
+  LP_var =0
+  for ratio in LP_ratio_dict.values():
+    LP_var = LP_var + (ratio - Decimal(LP_avg))**2
+  LP_var = LP_var / len(LP_Holders)
+
+  LP_stdev = sqrt(LP_var)
+
+  return LP_stdev, LP_avg, total_LP_amount
 
 
