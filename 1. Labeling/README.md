@@ -102,7 +102,3 @@ pairs(first: 1000, orderBy: createdAtBlockNumber, orderDirection: desc) {
  비율 | 87.1% | 12.9% 
  
 ## 4. 최종 라벨링 결과 파일(Labeling_v1.2.csv)
-
-
-
-
