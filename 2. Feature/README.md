@@ -30,7 +30,12 @@
 - 정상 데이터 파일에 대해서 TimeStamp를 1일로 변경해서 관련된 데이터를 다시 가져오는 코드들
 
 ## 4. Labeling
- ## 4.1 Labeling 파일 버전 관리
+ + Labeling_to_Dataset.py 파일로 라벨링 파일에서 Dataset파일 변환 자동화    
+
+<details>
+<summary>Labeling 파일 버전 관리</summary>
+<div markdown="1">
+ 
 > - Labeling_v1.0.csv : 이전 Labeling 단계에서 가져온 파일
 > - Labeling_v1.1.csv : False_data_timestamp.py , 정상 데이터의 TimeStamp를 구해서 'feature_timestamp' 열 추가
 > - Labeling_v1.2.csv : 토큰의 Last Transaction이 30일 이후인 데이터들 정제했음. 이게 최종 Labeling Data
@@ -44,10 +49,21 @@
 > - Labeling_v1.9.csv : 정상 TimeStamp를 1로 바꿔서 False 데이터들의 Feature를 전부 다시 구해서 수정.
 > - Labeling_v1.10.csv : 정상과 스캠 토큰의 비율을 맞추기 위해서 임의로 정상 데이터들의 수를 조절
 
- ## 4.2 Dataset 파일 버전 관리
-> + Labeling_to_Dataset.py 파일로 라벨링 파일에서 Dataset파일 변환 자동화    
+</div>
+</details>
+
+<details>
+<summary>Dataset 파일 버전 관리</summary>
+<div markdown="1">
+
 > - Dataset_v1.0.csv : Labeling_v1.8.csv 파일로 Dataset 만듦    
 > - Dataset_v1.1.csv : Labeling_v1.9.csv 파일로 Dataset 만듦
+> - Dataset_v1.2.csv : 정상 데이터와 스캠 비율 4:1로 맞춰서 다시 데이터셋
+> - Dataset_v1.3.csv : 자잘한 오류 고쳐서 데이터 셋 -> 논문에 쓴 데이터셋
+ - > 오류 : Burn Ratio 비율을 잘못해서 
+ </div>
+</details>
+
 
 # Feature 도출 단계에서 발생한 Issue들
  1. ~~__정상__ 토큰들에서 많은 경우가 유니스왑풀을 개발자가 아닌, 사용자가 임의로 만든 풀인 경우가 있음. 이 부분에 대한 처리 어케하지~~ 
