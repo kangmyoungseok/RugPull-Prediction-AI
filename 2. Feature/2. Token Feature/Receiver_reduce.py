@@ -1,6 +1,6 @@
 import pandas as pd
 from pandas.core.frame import DataFrame
-datas = pd.read_csv('Labeling_v1.5.csv',encoding='utf-8-sig').to_dict('records')
+datas = pd.read_csv('Labeling_v2.2.csv',encoding='utf-8-sig').to_dict('records')
 len(datas)
 
 
@@ -23,4 +23,4 @@ for data in datas:
 print(len(result))
 
 df = pd.DataFrame(result)
-df.to_csv('Labeling_v1.6.csv',encoding='utf-8-sig',index=False)
+df.to_csv('Labeling_v2.3.csv',encoding='utf-8-sig',index=False)

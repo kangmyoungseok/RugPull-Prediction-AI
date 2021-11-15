@@ -2,7 +2,7 @@ import pandas as pd
 from pandas.core.frame import DataFrame
 from decimal import Decimal
 
-datas = pd.read_csv('Labeling_v1.10.csv').to_dict('records')
+datas = pd.read_csv('Labeling_v2.4.csv').to_dict('records')
 
 
 
@@ -30,23 +30,26 @@ creator_list = []
 for data in datas:
     creator_list.append(data['receiver']) 
 
+
+
 result = []
 for data in datas:
     dataset = {}
     try:
+        dataset['id'] = data['id']
         dataset['Label'] = data['is_rugpull']
-        dataset['txcount'] = get_txcount(data)
-        dataset['mint_count'] = data['mint_count']
-        dataset['swap_count'] = data['swap_count']
-        dataset['burn_count'] = data['burn_count']
+#        dataset['txcount'] = get_txcount(data)
+        dataset['mint_count_per_week'] = data['mint_count'] / ((int(data['active_period']) / (60* 60 * 24 * 7)) + 1)
+#        dataset['swap_count_per_week'] = data['swap_count'] / ((int(data['active_period']) / 60* 60 * 24 * 7) + 1)
+        dataset['burn_count_per_week'] = data['burn_count'] / ((int(data['active_period']) / (60* 60 * 24 * 7)) + 1)
         dataset['mint_ratio'] = float(data['mint_ratio'])
         dataset['swap_ratio'] = float(data['swap_ratio'])
         dataset['burn_ratio'] = float(data['burn_ratio'])
         dataset['mint_mean_period'] = float(data['mint_mean_period'])
         dataset['swap_mean_period'] = float(data['swap_mean_period'])
         dataset['burn_mean_period'] = float(data['burn_mean_period'])
-        dataset['swapIn'] = data['swapIn']
-        dataset['swapOut'] = data['swapOut']
+        dataset['swapIn_per_week'] = data['swapIn'] /((int(data['active_period']) / (60* 60 * 24 * 7)) + 1)
+        dataset['swapOut_per_week'] = data['swapOut'] / ((int(data['active_period']) / (60* 60 * 24 * 7)) + 1)
         dataset['swap_rate'] = float(data['swap_rate'])
         dataset['LP_avg'] = data['LP_avg']
         dataset['LP_stdev'] = data['LP_stdev']
@@ -60,4 +63,4 @@ for data in datas:
         continue    
     result.append(dataset)
 len(result)
-pd.DataFrame(result).to_csv('Dataset_v1.3.csv',encoding='utf-8-sig',index=False)
+pd.DataFrame(result).to_csv('Dataset_v1.4.csv',encoding='utf-8-sig',index=False)
