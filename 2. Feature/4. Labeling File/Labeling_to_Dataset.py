@@ -2,7 +2,7 @@ import pandas as pd
 from pandas.core.frame import DataFrame
 from decimal import Decimal
 
-datas = pd.read_csv('Labeling_v2.4.csv').to_dict('records')
+datas = pd.read_csv('Labeling_v2.5.csv').to_dict('records')
 
 
 
@@ -45,7 +45,7 @@ for data in datas:
         dataset['mint_ratio'] = float(data['mint_ratio'])
         dataset['swap_ratio'] = float(data['swap_ratio'])
         dataset['burn_ratio'] = float(data['burn_ratio'])
-        dataset['mint_mean_period'] = float(data['mint_mean_period'])
+        dataset['mint_mean_period'] = float(data['mint_mean_period']) 
         dataset['swap_mean_period'] = float(data['swap_mean_period'])
         dataset['burn_mean_period'] = float(data['burn_mean_period'])
         dataset['swapIn_per_week'] = data['swapIn'] /((int(data['active_period']) / (60* 60 * 24 * 7)) + 1)
@@ -63,4 +63,6 @@ for data in datas:
         continue    
     result.append(dataset)
 len(result)
-pd.DataFrame(result).to_csv('Dataset_v1.4.csv',encoding='utf-8-sig',index=False)
+pd.DataFrame(result).to_csv('Dataset_v1.5.csv',encoding='utf-8-sig',index=False)
+
+
