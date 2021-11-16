@@ -48,6 +48,7 @@
 > - Labeling_v1.8.csv : etherscan_Feature.py, '현재 시점의 토큰의 양' 을 구해오는 로직에서 오류 수정해서 다시 뽑음
 > - Labeling_v1.9.csv : 정상 TimeStamp를 1로 바꿔서 False 데이터들의 Feature를 전부 다시 구해서 수정.
 > - Labeling_v1.10.csv : 정상과 스캠 토큰의 비율을 맞추기 위해서 임의로 정상 데이터들의 수를 조절
+> - Labeling_v2.4.csv : 애매한 애들 정상으로 많이 넣고, 그거에 맞춰서 데이터들 다 다시 구함
 
 </div>
 </details>
@@ -60,6 +61,7 @@
 > - Dataset_v1.1.csv : Labeling_v1.9.csv 파일로 Dataset 만듦
 > - Dataset_v1.2.csv : 정상 데이터와 스캠 비율 4:1로 맞춰서 다시 데이터셋
 > - Dataset_v1.3.csv : 자잘한 오류 고쳐서 데이터 셋 -> 논문에 쓴 데이터셋
+> - Dataset_v1.4.csv : Labeling_v2.4.csv / 새로 데이터셋 생성. Feature 수정 : Transaction_count_per_week
  - > 오류 : Burn Ratio 비율을 잘못해서 
  </div>
 </details>
