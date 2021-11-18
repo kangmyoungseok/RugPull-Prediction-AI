@@ -6,7 +6,7 @@ from multiprocessing import Pool
 
 
 def get_feature(data):
-    if(str(data['is_rugpull']) != 'True'):
+    if(str(data['is_rugpull']) != 'False'):
         return data,1
     token_address = data['token00.id']
     decimals = 10 ** int(data['token00.decimals'])
