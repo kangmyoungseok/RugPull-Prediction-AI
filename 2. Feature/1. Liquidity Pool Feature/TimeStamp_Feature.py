@@ -18,6 +18,12 @@ from lib.TheGraphLib import *
 from lib.featureLib import *
 import datetime
 
+datas[0]['is_rugpull']
+datas = pd.read_csv('Labeling_v2.1.csv').to_dict('records')
+if(datas[0]['is_rugpull'] == True):
+    print(1)
+else:
+    print(2)
 def switch_file(file_name):
     global datas
     datas = pd.read_csv(file_name).to_dict('records')

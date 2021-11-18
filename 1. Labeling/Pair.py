@@ -111,7 +111,7 @@ for pair in result['data']['pairs']:
     year = time.gmtime(int(pair['createdAtTimestamp'])).tm_year
     month = time.gmtime(int(pair['createdAtTimestamp'])).tm_mon
     day = time.gmtime(int(pair['createdAtTimestamp'])).tm_mday
-    pair['createdAtTimestamp'] = str(year) + '-' + str(month) + '-' + str(day)
+    pair['createdAtDate'] = str(year) + '-' + str(month) + '-' + str(day)
     pair_frame.append(pair)
 
 last_block = result['data']['pairs'][999]['createdAtBlockNumber']
@@ -130,7 +130,7 @@ try:
             year = time.gmtime(int(pair['createdAtTimestamp'])).tm_year
             month = time.gmtime(int(pair['createdAtTimestamp'])).tm_mon
             day = time.gmtime(int(pair['createdAtTimestamp'])).tm_mday
-            pair['createdAtTimestamp'] = str(year) + '-' + str(month) + '-' + str(day)
+            pair['createdAtTDate'] = str(year) + '-' + str(month) + '-' + str(day)
             pair_frame.append(pair)
         query_iter = query_iter.replace(last_block,result['data']['pairs'][999]['createdAtBlockNumber'])
         if( int(result['data']['pairs'][999]['createdAtTimestamp'])  < 10966879):
@@ -145,7 +145,7 @@ except Exception as e:
     except:
       print(e)
     df = pd.json_normalize(pair_frame)
-    df.to_csv('Pairs_v1.8.csv',encoding='utf-8-sig',index=False)
+    df.to_csv('Pairs_v2.1.csv',encoding='utf-8-sig',index=False)
 
 
 
