@@ -14,6 +14,19 @@ for data in datas2:
         result.append(data)
 
 #에러인거 다시 쿼리 날려
+
+
+for data in result:
+    if(data['current_token_total_supply']!= -1):
+        continue
+    token_address = data['token00.id']
+    decimals = 10 ** int(data['token00.decimals'])
+            
+    #현재 Total Supply (그 시점의 토탈 Supply 대체)
+    current_token_total_supply = call_etherscan_current_total_supply(token_address,decimals)
+    print('id : %s,before : %s, after : %s'%(token_address,data['current_token_total_supply'],current_token_total_supply))
+    data['current_token_total_supply'] = current_token_total_supply
+
 for data in result:
     if(str(data['current_token_total_supply']) != '-1'):
         continue
@@ -24,6 +37,7 @@ for data in result:
     current_token_total_supply = call_etherscan_current_total_supply(token_address,decimals)
     print('id : %s,before : %s, after : %s'%(token_address,data['current_token_total_supply'],current_token_total_supply))
     data['current_token_total_supply'] = current_token_total_supply
+
 
 for data in result:
     if(str(data['current_token_total_supply']) != '-1'):
@@ -38,4 +52,4 @@ for data in result:
 
 print(len(result))
 
-pd.DataFrame(result).to_csv('Labeling_v2.8.csv',encodig='utf-8-sig',index=False)
+pd.DataFrame(result).to_csv('Labeling_v2.8.csv',encoding='utf-8-sig',index=False)
