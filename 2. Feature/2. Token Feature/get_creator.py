@@ -49,7 +49,7 @@ def get_creatorAddress(data):
     data['creator_address'] = creator_address
     return data
 
-datas = pd.read_csv('Pairs_v2.4.csv',encoding='utf-8-sig').to_dict('records')
+datas = pd.read_csv('Creator_list_v1.2.csv',encoding='utf-8-sig').to_dict('records')
 len(datas)
 
 proxy_contracts = [
@@ -72,19 +72,13 @@ proxy_contracts = [
 
 
 for data in tqdm(datas,desc="개발자 찾기:"):
-    try:
-        if(str(data['creator_address']) == 'nan' ):
-            data = get_creatorAddress(data)
-
         if(data['creator_address'] in proxy_contracts):
             query = mint_query_template % data['id']
             response = run_query(query)
             creator_address = response['data']['mints'][0]['to']
-            data['token00_creator_address'] = creator_address        
-    except Exception as e:
-        print(e)
+            data['creator_address'] = creator_address        
 
 
 
-pd.DataFrame(datas).to_csv('./drive/MyDrive/Pairs_v2.5.csv',encoding='utf-8-sig',index=False)
+pd.DataFrame(datas).to_csv('Creator_list_v1.2.csv',encoding='utf-8-sig',index=False)
 

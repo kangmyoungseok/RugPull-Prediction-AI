@@ -162,9 +162,8 @@ def call_etherscan_current_total_supply(token_address,decimals):
     etherscan_api_key = 'VFQIHCD19UDTRRDQUYF19HZK3QS1Y8ZXBF'
     repos_url = 'https://api.etherscan.io/api?module=stats&action=tokensupply&contractaddress='+token_address+'&apikey='+etherscan_api_key
     try:
-        gh_session = requests.Session()
-        repos = json.loads(gh_session.get(repos_url).text) # json으로 뽑아오자
-        current_total_supply = (float(repos['result']) / decimals)
+        response = requests.get(repos_url).json()
+        current_total_supply =  (float(response['result']) / decimals)
     except:
         current_total_supply = -1
         
