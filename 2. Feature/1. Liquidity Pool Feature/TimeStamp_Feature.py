@@ -17,32 +17,9 @@ from lib.mylib import *
 from lib.TheGraphLib import *
 from lib.featureLib import *
 import datetime
+from tqdm import tqdm
 
 
-
-def switch_file(file_name):
-    global datas
-    datas = pd.read_csv(file_name,encoding='utf-8-sig').to_dict('records')
-
-'''
-pair_address = '0x46a27ba5ef204265459c15ad33d1b368c44b2b9a'
-limit_timestamp = '1625084197'
-
-mint_data_transaction[17]['to']
-burn_data_transaction
-swap_data_transaction
-mint_count
-burn_count
-swap_count
-active_period
-swapIn =0
-swapOut=0
-LP_Holders
-
-pair_address = '0x49179a590b086ee09dacc5750cfdb312c0c73d10'
-
-
-'''
 
 def get_feature(data):
     try:
@@ -108,42 +85,39 @@ def get_feature(data):
         print(e)
         return -1
         
-    return data
+    return 1
 
 
 if __name__=='__main__':
-    createFolder('./result')
-    file_name = './Labeling_v3.1.csv'
-    file_count = split_csv(file_name)
-    out_list = []
-    out_list = list(input('입력(공백단위) : ').split())
+    datas = pd.read_csv('./Labeling_v3.1.csv',encoding='utf-8-sig').to_dict('records')
+    error_list = []
+    success_list = []
+    for data in tqdm(datas,desc="processing"):
+        result = get_feature(data)
+        if(result == -1):
+            error_list.append(data)
+        else:
+            success_list.append(data)
 
-    for i in out_list:         #하나의 파일 단위로 Creator Address 불러오고, 해당 초기 유동성풀 이더값 구해온다.
-        file_name = './result/out{}.csv'.format(i)
-        switch_file(file_name)
-        datas_len = len(datas)
-        try:
-            p = Pool(2)
-            count = 0
-            result = []
-            for ret in p.imap(get_feature,datas):
-                if(ret == -1):
-                    continue
-                count = count+1
-                result.append(ret)
-                if(count % 200 == 0):
-                    print("Process Rate : {}/{} {}%".format(count,datas_len,int((count/datas_len)*100)))
-            p.close()
-            p.join()
-        except Exception as e:
-            print(e)
-        print('===================================   finish    =========================================')
-        time.sleep(3)
-            
-        df = pd.DataFrame(result)
-        file_name = './drive/MyDrive/result/fout{}.csv'.format(i)
-        df.to_csv(file_name,encoding='utf-8-sig',index=False)
-        print(file_name + ' complete')
-    merge_csv()
+    df = pd.DataFrame(success_list)
+    file_name = './drive/MyDrive/result/Labeling_v3.2.csv'
+    df.to_csv(file_name,encoding='utf-8-sig',index=False)
+    count = 0
+    while(len(error_list) > 0):
+        count = count +1
+        for data in tqdm(error_list,desc="error processing"):
+            result = get_feature(data)
+            if(result == -1):
+                continue
+            else:
+                success_list.append(data)    
+                del error_list[error_list.index(data)]
+        if(count > 10):
+            break
 
+    
+    df = pd.DataFrame(success_list)
+    file_name = './drive/MyDrive/result/Labeling_v3.2.csv'
+    df.to_csv(file_name,encoding='utf-8-sig',index=False)
+    
 
