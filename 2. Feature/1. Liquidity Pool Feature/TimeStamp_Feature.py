@@ -19,14 +19,10 @@ from lib.featureLib import *
 import datetime
 
 
-datas = pd.read_csv('Labeling_v3.1.csv').to_dict('records')
-if(datas[0]['is_rugpull'] == True):
-    print(1)
-else:
-    print(2)
+
 def switch_file(file_name):
     global datas
-    datas = pd.read_csv(file_name).to_dict('records')
+    datas = pd.read_csv(file_name,encoding='utf-8-sig').to_dict('records')
 
 '''
 pair_address = '0x46a27ba5ef204265459c15ad33d1b368c44b2b9a'
@@ -47,7 +43,6 @@ pair_address = '0x49179a590b086ee09dacc5750cfdb312c0c73d10'
 
 
 '''
-data = datas[0]
 
 def get_feature(data):
     try:
@@ -118,7 +113,7 @@ def get_feature(data):
 
 if __name__=='__main__':
     createFolder('./result')
-    file_name = './error.csv'
+    file_name = './Labeling_v3.1.csv'
     file_count = split_csv(file_name)
     out_list = []
     out_list = list(input('입력(공백단위) : ').split())
@@ -146,7 +141,7 @@ if __name__=='__main__':
         time.sleep(3)
             
         df = pd.DataFrame(result)
-        file_name = './result/fout{}.csv'.format(i)
+        file_name = './drive/MyDrive/result/fout{}.csv'.format(i)
         df.to_csv(file_name,encoding='utf-8-sig',index=False)
         print(file_name + ' complete')
     merge_csv()
