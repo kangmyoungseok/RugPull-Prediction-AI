@@ -1,5 +1,5 @@
 # RugPull_Prediction_AI
-러그풀 예측 AI모델 개발
+This Projects aim to Predict Rugpull event using AI
 
 # 1. 라벨링
  - Total Data Input : __Uniswap에 Pool이 생성된 토큰__ 
