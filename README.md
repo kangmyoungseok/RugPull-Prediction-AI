@@ -1,18 +1,37 @@
-# RugPull_Prediction_AI
-This Projects aim to Predict Rugpull event using AI
+# RugPull Prediction AI Project
 
-# 1. 라벨링
- - Total Data Input : __Uniswap에 Pool이 생성된 토큰__ 
- + 전체 데이터에 대해서 유동성 풀을 기준으로, 러그풀이 발생했는지 아닌지에 대한 __True/False 라벨링__ 을 수행
+## 🔎 Overview
+- 2021.09.01 ~ 2021.12.18 [BoB10기 2차프로젝트]
+- This Project aim to Predict Rugpull in Uniswap which enables Investors to swap ERC-20 Tokens on Ethereum Blockchain
+- We Collect 50000 Tokens Which listed on Uniswap V2, and all of the Transaction of the Tokens Using [The Graph API](https://thegraph.com/hosted-service/subgraph/uniswap/uniswap-v2), [Bitquery](https://graphql.bitquery.io/ide), [Etherscan API](https://docs.etherscan.io/), [Ethplorer API](https://github.com/EverexIO/Ethplorer/wiki/ethplorer-api)  
 
 
-# 2. Feature 도출
-- 라벨링된 True/False 데이터에 대해서 학습시 사용할 Feature를 구한다. 이때, 각각의 Feature들은 __주어진 TimeStamp시점__ 까지의 Feature를 구한다.
-- 주어진 TimeStamp란?
-    1. 정상 : ~~토큰의 유동성 풀이 생성된 이후로 7일까지의 Feature~~
-         -> 학습을 해본결과 Feature를 7일까지 하면, 스캠코인과의 Feature들의 경향성이 너무 심함. __1일__ 로 수정
-    2. 스캠 : 러그풀 발생 직전까지의 Feature
-- 특이사항 : 라벨링된 데이터들의 Feature를 구하는 과정에서, 오류가 나는 상황이 많다. 해당데이터들은 삭제시켜서 Dataset의 크기가 줄어듬
+
+## 1. Labeling
+> - Total Data Input : __Tokens which are Listed in Uniswap V2__ (only ERC-20 Tokens That can be swap with WETH)
+> - Labeling all of the token Based on the Liquidity Pool's Change (if Rugpull Occurs, Liquidty Pool is Removed at once)
+
+
+## 2. Feature Extraction
+> - For all of the Tokens which are Labeled True or False, get Feature until TimeLimit.  
+> - __TimeLimit?__
+> > 1. Labeled True (Scam Token)
+> > --> From first transcation timestamp to timestamp before Rugpull occur 
+> > 2. Labeled False (Normal Token)
+> > --> From first transcation timestamp to last traction timestamp
+
+
+<details>
+<summary> 📌 Dataset Example ( Total 18 Features )</summary>
+<div markdown="1">
+
+
+| id | Label | mint_count_per_week | burn_count_per_week | mint_ratio | swap_ratio | burn_ratio | mint_mean_period | swap_mean_period | burn_mean_period |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|---|
+| 0xc45681eed9bea2a71cdcc1fa324a40f1d4617285 | True | 3.6242 | 0 | 0.666667 | 0.333333 | 0 | 0.264756 | 0.03685 | 0 |
+
+</div>
+</details>
 
 # 3. 학습
 
