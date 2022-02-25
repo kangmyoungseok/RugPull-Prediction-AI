@@ -1,7 +1,7 @@
 # RugPull Prediction AI Project
 
 ## 🔎 Overview
-- 2021.09.01 ~ 2021.12.18 [BoB10기 2차프로젝트]
+- 2021.09.01 ~ 2021.12.18 [Korea Education Program KITRI BOB 10th project, Team BOBAI]
 - This Project aim to Predict Rugpull in Uniswap which enables Investors to swap ERC-20 Tokens on Ethereum Blockchain
 - We Collect 50000 Tokens Which listed on Uniswap V2, and all of the Transaction of the Tokens Using [The Graph API](https://thegraph.com/hosted-service/subgraph/uniswap/uniswap-v2), [Bitquery](https://graphql.bitquery.io/ide), [Etherscan API](https://docs.etherscan.io/), [Ethplorer API](https://github.com/EverexIO/Ethplorer/wiki/ethplorer-api)  
 
