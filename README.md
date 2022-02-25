@@ -109,5 +109,8 @@ $python3 predict.py --address 0xb73428a159a02a4b377e940d0919eb5ba91c67e7
 [+] Our AI indicate this token is Safe
 ```
 
+# Video
+https://user-images.githubusercontent.com/33647663/155699528-8aaf7c09-11dd-4cd2-b1c5-e0bdec1c6004.mp4
+
 
 
