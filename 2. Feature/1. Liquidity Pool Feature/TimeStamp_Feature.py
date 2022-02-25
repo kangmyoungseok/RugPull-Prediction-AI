@@ -18,6 +18,7 @@ from lib.TheGraphLib import *
 from lib.featureLib import *
 import datetime
 from tqdm import tqdm
+from lib.BitqueryLib import *
 
 
 
@@ -89,7 +90,7 @@ def get_feature(data):
 
 
 if __name__=='__main__':
-    datas = pd.read_csv('./Labeling_v3.1.csv',encoding='utf-8-sig').to_dict('records')
+    datas = pd.read_csv('./Labelingd_v3.1.csv',encoding='utf-8-sig').to_dict('records')
     error_list = []
     success_list = []
     for data in tqdm(datas,desc="processing"):

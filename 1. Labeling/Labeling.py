@@ -34,7 +34,7 @@ def get_feature(data):
         burn_data_transaction = call_theGraph_burn(pair_address)
 
         rugpull_timestamp, rugpull_change, is_rugpull, before_rugpull_Eth, after_rugpull_Eth,rugpull_method = get_rugpull_timestamp(mint_data_transaction,swap_data_transaction,burn_data_transaction,token_index(data))
-
+        
 
         #initial_Liquidity 의 이더와 토큰 구하기
         initial_Liquidity_Eth , initial_Liquidity_Token = get_initial_Liquidity(data['token0.symbol'],mint_data_transaction)
@@ -118,7 +118,7 @@ if __name__=='__main__':
     out_list = list(input('입력(공백단위) : ').split())
 
     for i in out_list:         #하나의 파일 단위로 Creator Address 불러오고, 해당 초기 유동성풀 이더값 구해온다.
-        file_name = './result/out{}.csv'.format(i)
+        file_name = './result/out{}.csv'.format(i)  
         switch_file(file_name)
         datas_len = len(datas)
         try:

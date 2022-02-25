@@ -31,6 +31,7 @@ burn_query_template = '''
 {
   burns(first: 1000, orderBy: timestamp, orderDirection: asc, where:{ pair: "%s" , timestamp_gt:%s }) {
       amount0
+      
       amount1
       to
       sender
