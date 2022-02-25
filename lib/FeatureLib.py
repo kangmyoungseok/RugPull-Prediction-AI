@@ -1,3 +1,4 @@
+from logging import raiseExceptions
 from lib.Thegraph import *
 import json
 from bs4 import BeautifulSoup
@@ -124,7 +125,8 @@ def get_creatorAddress(pair_id,token_id):
     
     try:
         creator_address = repos['contractInfo']['creatorAddress']
-        #print('find by ethplorer :' + token_id)
+        if(creator_address == None):
+          raise ValueError
     except:     #오류가 나면 이더스캔에서 크롤링
          url = 'https://etherscan.io/address/'+token_id
          try:
@@ -190,8 +192,8 @@ def get_unlock_date(holders,creator):
         arguments = response['data']['ethereum']['arguments']
         return int(arguments[-1]['value']['value'])
       except Exception as e:
-        print(Fore.RED +'[-] Failed to get unlock date of locked tokens.')
-        print(Fore.RED +'[-] check manually whether token lock expired soon or not')
+        print(Fore.LIGHTYELLOW_EX +'[!] Failed to get Liquidity pool\'s lock Expiration date')
+        print(Fore.LIGHTYELLOW_EX +'[!] check manually whether token lock expired soon or not')
         return 9999999999 
 
     
