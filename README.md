@@ -28,10 +28,10 @@
 - Full Dataset is in **2. Feature/4. Labeling File**
 - Total 18 Features, we used 20000 Tokens for AI Training
 
-| id | Label | mint_count_per_week | burn_count_per_week | mint_ratio | swap_ratio | burn_ratio | mint_mean_period | swap_mean_period | burn_mean_period |
-|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|---|
-| 0xc45681eed9bea2a71cdcc1fa324a40f1d4617285 | True | 3.6242 | 0 | 0.666667 | 0.333333 | 0 | 0.264756 | 0.03685 | 0 |
-| 0x3f759c3f4cdba32e69ddf607e0cdcc2547061b97 | FALSE | 43.13652027 | 14.77804309 | 0.123232845 |0.834549093 | 0 | 0.264756 | 0.03685 | 0 |    
+| id | Label | mint_count_per_week | burn_count_per_week | mint_ratio | swap_ratio | burn_ratio | mint_mean_period | swap_mean_period | burn_mean_period |..|token_creator_holding_ratio|
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| 0xc45681eed9bea2a71cdcc1fa324a40f1d4617285 | True | 3.6242 | 0 | 0.666667 | 0.333333 | 0 | 0.264756 | 0.03685 | 0 |..|0.130261666|
+| 0x3f759c3f4cdba32e69ddf607e0cdcc2547061b97 | FALSE | 43.13652027 | 14.77804309 | 0.123232845 |0.834549093 | 0 | 0.125160144 | 0.194190522 | 0.179786452 |..| 0.043933532 |   
 
 
 ### 3. Training
