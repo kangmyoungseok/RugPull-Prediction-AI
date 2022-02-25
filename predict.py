@@ -12,6 +12,7 @@ import argparse
 from datetime import datetime
 
 
+
 '''
 pair = get_pair("0xb73428a159a02a4b377e940d0919eb5ba91c67e7")
 result = is_rugpull_occur(pair)
@@ -45,7 +46,7 @@ check if this token is in UNISWAP v2 and has pool with WETH""".format(token_addr
         exit(0)
 
 
-## main 설정 ##
+## main ##
 def main() -> None:
     init(autoreset=True)
     os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
@@ -61,16 +62,13 @@ def main() -> None:
                         required=True,
                         help='Enter Token Address for RUGPULL CHECK & AI Prediction')
 
+    parser.add_argument('--verbose', '-v', action='count', default=0,help='See detail report for token')
     args = parser.parse_args()
 
-    try:
-        if not os.path.isfile('ann97.h5'):
-            print(Fore.RED + '[-] AI MODEL IS NOT INSTALLED')
-            raise SystemExit(1)
+    if not os.path.isfile('ann97.h5'):
+        print(Fore.RED + '[-] AI MODEL IS NOT INSTALLED')
+        raise SystemExit(1)
     
-    except KeyboardInterrupt:
-        print(Fore.RED + "[-] User Interrupted The Program.")
-        raise SystemExit(0)
 
     # get token data from thegrpah API : https://thegraph.com/hosted-service/subgraph/uniswap/uniswap-v2
     pair = get_pair(args.address)
@@ -108,7 +106,7 @@ def main() -> None:
     burn_data_transaction = call_theGraph_burn(pair.id)
 
     mint_count = len(mint_data_transaction)
-    swap_count = len(swap_data_transaction)
+    swap_count = len(swap_data_transaction) 
     burn_count = len(burn_data_transaction)
 
     initial_timestamp = int(mint_data_transaction[0]['timestamp'])
@@ -132,50 +130,85 @@ def main() -> None:
     # if lock is expired or will be expired in 3days, then set lock_ratio to 0.
     current_time = int(time.time())
     if( unlock_date - current_time < 259200):
-        print("[+] Alert!! Token's lock will be expired soon. Be careful regardless of AI Score ")
+        print(Fore.RED + '''
+[!] Alert!! Token's lock will be expired soon. Be careful regardless of AI Score
+[!] Lots of Rugpull occur after Token's Lock is expired
+        ''')
         lp_creator_holding_ratio += lp_lock_ratio # if lock is expired, creator will get LP Token back
         lp_lock_ratio = 0
 
+    # print detail information if -v option is specified
+    if(args.verbose > 0):
+        print(Fore.LIGHTBLUE_EX+'[Pair Info] https://etherscan.io/token/{}'.format(pair.id))
+        print(Fore.LIGHTBLUE_EX+'[Pair Info] Uniswap Pair Address : {}'.format(pair.id))
+        print(Fore.LIGHTBLUE_EX+'[Pair Info] Liquidity Pool\'s Reserved : {}Eth'.format(float(pair.reserveETH)/2))
+        print(Fore.LIGHTBLUE_EX+'[Pair Info] Liquidity Pool\'s Lock Ratio : {}'.format(lp_lock_ratio))
+        print(Fore.LIGHTBLUE_EX+'[Pair Info] Liquidity Pool\'s Lock Expiration Date : {}\n'.format(datetime.fromtimestamp(int(unlock_date)).strftime('%Y-%m-%d %H:%M:%S')))
+
+        print(Fore.LIGHTBLUE_EX+'[Token Info] https://etherscan.io/token/{}'.format(pair.token00.id))
+        print(Fore.LIGHTBLUE_EX+'[Token Info] Token Creator : {}'.format(token_creator))
+        print(Fore.LIGHTBLUE_EX+'[Token Info] Swap In(buy token with Ether) count : {}'.format(swap_in))
+        print(Fore.LIGHTBLUE_EX+'[Token Info] Swap Out(Sell Token) count : {}'.format(swap_out))
+
+        
+
+
+
     # insert data into dataset / total 18 features.
-    dataset = {}
-    dataset['mint_count_per_week'] = mint_count / ((int(active_period) / (60* 60 * 24 * 7)) + 1)
-    dataset['burn_count_per_week'] = burn_count / ((int(active_period) / (60* 60 * 24 * 7)) + 1)
-    dataset['mint_ratio'] = mint_count / (mint_count + burn_count + swap_count)
-    dataset['swap_ratio'] = swap_count/ (mint_count + burn_count + swap_count)
-    dataset['burn_ratio'] = burn_count / (mint_count + burn_count + swap_count)
-    dataset['mint_mean_period'] = mint_mean_period / active_period
-    dataset['swap_mean_period'] = swap_mean_period / active_period
-    dataset['burn_mean_period'] = burn_mean_period / active_period
-    dataset['swap_in_per_week'] = swap_in /((int(active_period) / (60* 60 * 24 * 7)) + 1)
-    dataset['swap_out_per_week'] = swap_out / ((int(active_period) / (60* 60 * 24 * 7)) + 1)
-    dataset['swap_rate'] = swap_in / (swap_out + 1)
-    dataset['lp_avg'] = lp_avg 
-    dataset['lp_std'] = lp_std
-    dataset['lp_creator_holding_ratio'] = lp_creator_holding_ratio
-    dataset['lp_lock_ratio'] = lp_lock_ratio
-    dataset['token_burn_ratio'] = token_burn_ratio
-    dataset['token_creator_holding_ratio'] = token_creator_holding_ratio
-    dataset['number_of_token_creation_of_creator'] = 1
+    dataset1 = {}
+    dataset1['id'] = pair.id
+    dataset1['mint_count_per_week'] = mint_count / ((int(active_period) / (60* 60 * 24 * 7)) + 1)
+    dataset1['burn_count_per_week'] = burn_count / ((int(active_period) / (60* 60 * 24 * 7)) + 1)
+    dataset1['mint_ratio'] = mint_count / (mint_count + burn_count + swap_count)
+    dataset1['swap_ratio'] = swap_count/ (mint_count + burn_count + swap_count)
+    dataset1['burn_ratio'] = burn_count / (mint_count + burn_count + swap_count)
+    dataset1['mint_mean_period'] = mint_mean_period / active_period
+    dataset1['swap_mean_period'] = swap_mean_period / active_period
+    dataset1['burn_mean_period'] = burn_mean_period / active_period
+    dataset1['swap_in_per_week'] = swap_in /((int(active_period) / (60* 60 * 24 * 7)) + 1)
+    dataset1['swap_out_per_week'] = swap_out / ((int(active_period) / (60* 60 * 24 * 7)) + 1)
+    dataset1['swap_rate'] = swap_in / (swap_out + 1)
+    dataset1['lp_avg'] = lp_avg 
+    dataset1['lp_std'] = lp_std
+    dataset1['lp_creator_holding_ratio'] = lp_creator_holding_ratio
+    dataset1['lp_lock_ratio'] = lp_lock_ratio
+    dataset1['token_burn_ratio'] = token_burn_ratio
+    dataset1['token_creator_holding_ratio'] = token_creator_holding_ratio
+    dataset1['number_of_token_creation_of_creator'] = 1
 
 
     # Calcalate AI Score
-    print(dataset)
-    dataset = [dataset]
-    dataset = pd.DataFrame(dataset)
+    train = pd.read_csv('Dataset_v1.9.csv').drop(columns=['Label']).to_dict('records')
+    train.append(dataset1)
+
+    dataset = pd.DataFrame(train)
     origin = dataset
 
+    dataset = dataset.drop(columns=['id'])
     dataset = dataset.dropna(how='any', axis=0)
 
+    # Normalizaion
     scaler = MinMaxScaler()
     dataset[ : ] = scaler.fit_transform(dataset[ : ])
 
     model = keras.models.load_model('ann97.h5')
     #model.summary()
-
+    
     result = model.predict(dataset)
     origin['predict'] = result
+    
+    result = origin.to_dict('records')[-1]['predict']
+    
 
-    print(result)
+    if(result < 0.5):
+        print(Fore.GREEN+'[+] Probabiliy of Rugpull is : {}%'.format(round(result*100,2)))
+        print(Fore.GREEN+'[+] Our AI indicate this token is Safe')
+    else:
+        print(Fore.YELLOW+'[+] Probabiliy of Rugpull is : {}%'.format(round(result*100,2)))
+        print(Fore.YELLOW+'[+] Our AI indicate this token is Dangerous')
+
+
+
 
 if __name__ == "__main__":
     main()
