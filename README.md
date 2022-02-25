@@ -84,6 +84,8 @@ $python3 predict.py --address 0xb73428a159a02a4b377e940d0919eb5ba91c67e7
 - in this case, use option `-v` for detail info
  
 ```py
+$python3 predict.py --address 0x888680deda2a1a53c1d93bfae591b93ca1f83bec -v
+
 [!] RUGPULL PREDICTION AI MODEL (MADE BY BOBAI)
 [!] Github repo: https://github.com/kangmyoungseok/RugPull_Prediction_AI
 
